@@ -1,0 +1,32 @@
+---
+- name: creating lamp
+  host: all
+  become: yes
+
+    tasks: 
+    - name: installing httpd
+      yum:
+        - httpd
+        - mariadb
+        - mariadb-server
+        - php
+        - php-mysql
+      state: present
+
+    - name: start httpd 
+      service: httpd
+        state: restarted
+        enable: yes
+
+    - name: start mariadb
+      service: mariadb
+        state: started
+        enable: yes
+    
+    - name: edit firewall
+      firewalld:
+        service: httpd
+        state:  enabled
+        permanent: true 
+        immediate: true 
+
